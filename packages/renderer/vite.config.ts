@@ -1,14 +1,18 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import resolve, { lib2esm } from 'vite-plugin-resolve'
-import electron from 'vite-plugin-electron/renderer'
-import pkg from '../../package.json'
+import { defineConfig } from "vite"
+import vue from "@vitejs/plugin-vue"
+import resolve, { lib2esm } from "vite-plugin-resolve"
+import electron from "vite-plugin-electron/renderer"
+import pkg from "../../package.json"
+import Unocss from "unocss/vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
   mode: process.env.NODE_ENV,
   root: __dirname,
   plugins: [
+    Unocss({
+      /* options */
+    }),
     vue(),
     electron(),
     resolve(
@@ -22,7 +26,7 @@ export default defineConfig({
         // What they have in common is that they will return - ESM format code snippets
 
         // ESM format string
-        'electron-store': 'export default require("electron-store");',
+        "electron-store": 'export default require("electron-store");',
         // Use lib2esm() to easy to convert ESM
         // Equivalent to
         /**
@@ -32,23 +36,20 @@ export default defineConfig({
          * export { _D_ as default }
          * `
          */
-        sqlite3: lib2esm('sqlite3', { format: 'cjs' }),
+        sqlite3: lib2esm("sqlite3", { format: "cjs" }),
         serialport: lib2esm(
           // CJS lib name
-          'serialport',
+          "serialport",
           // export memebers
-          [
-            'SerialPort',
-            'SerialPortMock',
-          ],
-          { format: 'cjs' },
+          ["SerialPort", "SerialPortMock"],
+          { format: "cjs" },
         ),
-      }
+      },
     ),
   ],
-  base: './',
+  base: "./",
   build: {
-    outDir: '../../dist/renderer',
+    outDir: "../../dist/renderer",
     emptyOutDir: true,
     sourcemap: true,
   },
